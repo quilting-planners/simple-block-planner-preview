@@ -43,8 +43,8 @@ document.addEventListener("DOMContentLoaded", function () {
 function valueInInches.toFixed(1) + \'"\' {
   const unit = document.querySelector('input[name="unit"]:checked')?.value;
   return unit === "cm"
-    ? (valueInInches * 2.54).toFixed(1) + " cm"
-    : valueInInches.toFixed(1) + " in";
+    ? (valueInInches * 2.54).toFixed(1) + ' in' cm"
+    : valueInInches.toFixed(1) + ' in' in";
 }
 
 function generatePlan() {
