@@ -221,15 +221,19 @@ Batting: ${battingCost}</p>`;
 
 
 
-    html += `
-    <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-      <button id="copy-plan-button" type="button" class="copy-button">
-        <i class="fa-solid fa-copy" style="margin-right: 0.5em;"></i>Copy plan
-      </button>
-      <button id="feedback-button" type="button" class="outline-button">
-        Give feedback <i class="fa-solid fa-up-right-from-square" style="margin-left: 0.5em;"></i>
-      </button>
-    </div>`;
+   html += `
+  <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
+    <button id="copy-plan-button" type="button" class="copy-button">
+      <i class="fa-solid fa-copy" style="margin-right: 0.5em;"></i>Copy plan
+    </button>
+    <div id="copy-message" style="display: none; color: green; font-weight: 600;">
+      <i class="fa-solid fa-check" style="margin-right: 0.3em;"></i>Copied to clipboard
+    </div>
+    <button id="feedback-button" type="button" class="outline-button">
+      Give feedback <i class="fa-solid fa-up-right-from-square" style="margin-left: 0.5em;"></i>
+    </button>
+  </div>`;
+
 
     const out = document.getElementById("output");
     out.innerHTML = html;
@@ -240,7 +244,13 @@ Batting: ${battingCost}</p>`;
       const clone = out.cloneNode(true);
       clone.querySelector("#copy-plan-button")?.remove();
       clone.querySelector("#feedback-button")?.remove();
-      navigator.clipboard.writeText(clone.textContent.trim()).then(() => alert("Plan copied to clipboard!"));
+      navigator.clipboard.writeText(clone.textContent.trim()).then(() => {
+  const msg = document.getElementById("copy-message");
+  msg.style.display = "block";
+  setTimeout(() => {
+    msg.style.display = "none";
+  }, 3000);
+});
     });
 
     document.getElementById("feedback-button").addEventListener("click", () => {
