@@ -130,21 +130,28 @@ function generatePlan() {
     const blockArea = blockSize * blockSize * totalBlocks;
     const blockFabricYards = (blockArea / 1296).toFixed(2);
 
-    // Sashing
-    const sashingLenIn =
-      sashing > 0 ? (blocksAcross - 1) * quiltLength + (blocksDown - 1) * quiltWidth : null;
-    const sashingStrips = sashingLenIn != null ? Math.ceil(sashingLenIn / WOF) : null;
-    const sashingLenYd = sashingLenIn != null ? (sashingLenIn / 36).toFixed(2) : null;
+   // Sashing
+let sashingStrips = null, sashingYards = null;
+if (sashing > 0) {
+  const sashingLenIn = (blocksAcross - 1) * quiltLength + (blocksDown - 1) * quiltWidth;
+  sashingStrips = Math.ceil(sashingLenIn / WOF);
+  sashingYards = ((sashingStrips * sashing) / 36).toFixed(2);
+}
 
-    // Border
-    const borderLenIn = border > 0 ? 2 * (topWidth + topLength) : null;
-    const borderStrips = borderLenIn != null ? Math.ceil(borderLenIn / WOF) : null;
-    const borderLenYd = borderLenIn != null ? (borderLenIn / 36).toFixed(2) : null;
+// Border
+let borderStrips = null, borderYards = null;
+if (border > 0) {
+  const borderLenIn = 2 * (topWidth + topLength);
+  borderStrips = Math.ceil(borderLenIn / WOF);
+  borderYards = ((borderStrips * border) / 36).toFixed(2);
+}
 
-    // Binding
-    const bindingLenIn = 2 * (quiltWidth + quiltLength) + 10;
-    const bindingStrips = Math.ceil(bindingLenIn / WOF);
-    const bindingLenYd = (bindingLenIn / 36).toFixed(2);
+// Binding
+const bindingWidth = 2.5;
+const bindingLenIn = 2 * (quiltWidth + quiltLength) + 10;
+const bindingStrips = Math.ceil(bindingLenIn / WOF);
+const bindingYards = ((bindingStrips * bindingWidth) / 36).toFixed(2);
+
 
     // Summary
     const summary = `You’re making a ${
@@ -168,15 +175,15 @@ function generatePlan() {
     html += `<p><strong>Finished quilt</strong><br>${quiltWidth.toFixed(1)}" x ${quiltLength.toFixed(1)}"</p>`;
     html += `<p><strong>Blocks</strong><br>${totalBlocks} total blocks (${blocksAcross} across by ${blocksDown} down).<br>Cut blocks to ${cutBlockSize}" x ${cutBlockSize}".<br>You’ll need at least ${blockFabricYards} yards of 42” fabric.</p>`;
 
-    if (cutSashing) {
-      html += `<p><strong>Sashing</strong><br>Cut sashing strips to ${cutSashing}" wide.<br>You’ll need ${sashingStrips} strips from 42" wide fabric (${sashingLenYd} yards).</p>`;
-    }
+  if (cutSashing) {
+  html += `<p><strong>Sashing</strong><br>Cut sashing strips to ${cutSashing}" wide.<br>You’ll need ${sashingStrips} strips from 42" wide fabric (${sashingYards} yards).</p>`;
+}
 
-    if (cutBorder) {
-      html += `<p><strong>Border</strong><br>Cut border strips to ${cutBorder}" wide.<br>You’ll need ${borderStrips} strips from 42" wide fabric (${borderLenYd} yards).</p>`;
-    }
+if (cutBorder) {
+  html += `<p><strong>Border</strong><br>Cut border strips to ${cutBorder}" wide.<br>You’ll need ${borderStrips} strips from 42" wide fabric (${borderYards} yards).</p>`;
+}
 
-    html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide.<br>You’ll need ${bindingStrips} strips from 42" wide fabric (${bindingLenYd} yards).</p>`;
+html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide.<br>You’ll need ${bindingStrips} strips from 42" wide fabric (${bindingYards} yards).</p>`;
 
     html += `
       <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
