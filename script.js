@@ -274,17 +274,27 @@ html += `
     out.scrollIntoView({ behavior: "smooth" });
 
     document.getElementById("copy-plan-button").addEventListener("click", () => {
-      const clone = out.cloneNode(true);
-      clone.querySelector("#copy-plan-button")?.remove();
-      clone.querySelector("#feedback-button")?.remove();
-      navigator.clipboard.writeText(clone.textContent.trim()).then(() => {
-  const msg = document.getElementById("copy-message");
-  msg.style.display = "block";
-  setTimeout(() => {
-    msg.style.display = "none";
-  }, 3000);
+  const clone = out.cloneNode(true);
+  clone.querySelector("#copy-plan-button")?.remove();
+  clone.querySelector("#feedback-button")?.remove();
+
+  // Extract meaningful content and preserve line breaks
+  const lines = [];
+  clone.querySelectorAll("h2, p, .hint").forEach((el) => {
+    lines.push(el.textContent.trim());
+  });
+
+  const plainText = lines.join("\n\n");
+
+  navigator.clipboard.writeText(plainText).then(() => {
+    const msg = document.getElementById("copy-message");
+    msg.style.display = "block";
+    setTimeout(() => {
+      msg.style.display = "none";
+    }, 6000);
+  });
 });
-    });
+
 
     document.getElementById("feedback-button").addEventListener("click", () => {
       window.open("https://docs.google.com/forms/d/e/1FAIpQLScRJtzvGLaC22oTmgbU4Us7MTRIaOFjNdx3cU4_3HRNKp1hUg/viewform?usp=preview", "_blank");
