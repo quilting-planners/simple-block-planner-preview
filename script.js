@@ -36,6 +36,7 @@ function generatePlan() {
     let throwSize = "";
     let bedName = "";
 
+    // Determine total quilt size
     if (use === "Throw for couch") {
       const tsInput = document.querySelector('input[name="throw-size"]:checked');
       throwSize = tsInput?.value;
@@ -125,7 +126,7 @@ function generatePlan() {
     // Yardage + strips (42" wide fabric)
     const WOF = 42;
 
-    // Blocks
+    // Block fabric
     const blockArea = blockSize * blockSize * totalBlocks;
     const blockFabricYards = (blockArea / 1296).toFixed(2);
 
@@ -177,7 +178,67 @@ function generatePlan() {
 
     html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide.<br>You’ll need ${bindingStrips} strips from 42" wide fabric (${bindingLenYd} yards).</p>`;
 
-    document.getElementById("output").innerHTML = html;
+    html += `
+      <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <button id="copy-plan-button" type="button" class="copy-button">
+          <i class="fa-solid fa-copy" style="margin-right: 0.5em;"></i>Copy plan
+        </button>
+        <button id="feedback-button" type="button" class="outline-button">
+          Give feedback <i class="fa-solid fa-up-right-from-square" style="margin-left: 0.5em;"></i>
+        </button>
+      </div>`;
+
+    const out = document.getElementById("output");
+    out.innerHTML = html;
+
+    document.getElementById("copy-plan-button").addEventListener("click", () => {
+      const clone = out.cloneNode(true);
+      clone.querySelector("#copy-plan-button")?.remove();
+      clone.querySelector("#feedback-button")?.remove();
+      clone.querySelectorAll("hr").forEach((hr) => {
+        hr.replaceWith(document.createTextNode("\n\n---\n\n"));
+      });
+
+      function getTextWithLineBreaks(node) {
+        let text = "";
+        node.childNodes.forEach((child) => {
+          if (child.nodeType === Node.TEXT_NODE) {
+            text += child.textContent;
+          } else if (child.nodeType === Node.ELEMENT_NODE) {
+            if (child.tagName === "BR") {
+              text += "\n";
+            } else if (child.tagName === "P") {
+              text += getTextWithLineBreaks(child).trim() + "\n\n";
+            } else if (child.tagName === "H2") {
+              text += "\n" + getTextWithLineBreaks(child).trim().toUpperCase() + "\n\n";
+            } else {
+              text += getTextWithLineBreaks(child);
+            }
+          }
+        });
+        return text;
+      }
+
+      const plainText = getTextWithLineBreaks(clone).trim();
+
+      navigator.clipboard.writeText(plainText)
+        .then(() => alert("Plan copied to clipboard!"))
+        .catch((err) => {
+          console.error("Copy failed:", err);
+          alert("Failed to copy plan. Try using a different browser.");
+        });
+    });
+
+    document.getElementById("feedback-button").addEventListener("click", () => {
+      window.open(
+        "https://docs.google.com/forms/d/e/1FAIpQLScRJtzvGLaC22oTmgbU4Us7MTRIaOFjNdx3cU4_3HRNKp1hUg/viewform?usp=preview",
+        "_blank"
+      );
+    });
+
+    out.style.display = "block";
+    out.scrollIntoView({ behavior: "smooth" });
+
   } catch (e) {
     console.error(e);
     document.getElementById("output").innerHTML = `<p>Error: ${e.message}</p>`;
