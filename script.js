@@ -111,11 +111,11 @@ const bindingYards = ((bindingStrips * bindingWidth) / 36).toFixed(2);
     const summary = `You’re making a ${
       use === "Throw for couch"
         ? `${throwSize} throw blanket`
-        : `cover for a ${bedName} bed (${bedWidth} in x ${bedLength} in)`
-    } with ${blockSize} in blocks${
-      sashing > 0 ? `, ${sashing} in sashing` : ""
-    }${border > 0 ? `, and a ${border} in border` : ""}${
-      use !== "Throw for couch" && overhang > 0 ? ` and ${overhang} in overhang` : ""
+        : `cover for a ${bedName} bed (${bedWidth}" x ${bedLength}")`
+    } with ${blockSize}" blocks${
+      sashing > 0 ? `, ${sashing}" sashing` : ""
+    }${border > 0 ? `, and a ${border}" border` : ""}${
+      use !== "Throw for couch" && overhang > 0 ? ` and ${overhang}" overhang` : ""
     }.`
 
     const planTitle = use === "Throw for couch"
@@ -123,8 +123,8 @@ const bindingYards = ((bindingStrips * bindingWidth) / 36).toFixed(2);
       : `${bedName.charAt(0).toUpperCase() + bedName.slice(1)} bed cover`;
 
     let html = `<h2>${planTitle}</h2><span class="hint">${summary}</span>`;
-    html += `<p><strong>Finished quilt</strong><br>${quiltWidth.toFixed(1)} in x ${quiltLength.toFixed(1)} in</p>`;
-    html += `<p><strong>Blocks</strong><br>${blocksAcross * blocksDown} total blocks (${blocksAcross} x ${blocksDown})<br>Cut to ${cutBlockSize} in x ${cutBlockSize} in</p>`;
+    html += `<p><strong>Finished quilt</strong><br>${quiltWidth.toFixed(1)}" x ${quiltLength.toFixed(1)}"</p>`;
+    html += `<p><strong>Blocks</strong><br>${blocksAcross * blocksDown} total blocks (${blocksAcross} across by ${blocksDown} down)<br>Cut to ${cutBlockSize}" x ${cutBlockSize}"</p>`;
 
 if (cutSashing) {
   html += `<p><strong>Sashing</strong><br>Cut sashing strips to ${cutSashing}" wide.<br>You’ll need ${sashingStrips} strips from standard width fabric (${sashingYards} yards).</p>`;
