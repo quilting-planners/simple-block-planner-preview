@@ -150,26 +150,37 @@ function generatePlan() {
       You'll need ${standardBacking.yards} yards of 42" fabric. Cut in ${standardBacking.panels} panels.<br>
       Or ${wideBacking.yards} yards of extra-wide fabric. Cut in ${wideBacking.panels} panels.</p>`;
 
-// Batting Recommendations (Quilter’s Dream from Missouri Star Quilt Co)
+// Batting Recommendations (Quilter’s Dream, pre-filtered search links)
 const battingSizes = [
-  { name: "Crib", width: 46, length: 60, url: "https://www.missouriquiltco.com/products/crib-size-quilters-dream-cotton-batting-select-loft" },
-  { name: "Throw", width: 60, length: 60, url: "https://www.missouriquiltco.com/products/throw-size-quilters-dream-cotton-batting-select-loft" },
-  { name: "Twin", width: 72, length: 93, url: "https://www.missouriquiltco.com/products/twin-size-quilters-dream-cotton-batting-select-loft" },
-  { name: "Double", width: 93, length: 96, url: "https://www.missouriquiltco.com/products/double-size-quilters-dream-cotton-batting-select-loft" },
-  { name: "Queen", width: 108, length: 93, url: "https://www.missouriquiltco.com/products/queen-size-quilters-dream-cotton-batting-select-loft" },
-  { name: "King", width: 122, length: 120, url: "https://www.missouriquiltco.com/products/king-size-quilters-dream-cotton-batting-select-loft" },
+  { name: "Crib", width: 46, length: 60, sizeTag: "Crib" },
+  { name: "Throw", width: 60, length: 60, sizeTag: "Throw" },
+  { name: "Twin", width: 72, length: 93, sizeTag: "Twin" },
+  { name: "Double", width: 96, length: 93, sizeTag: "Double" },
+  { name: "Queen", width: 108, length: 93, sizeTag: "Queen" },
+  { name: "King", width: 122, length: 120, sizeTag: "King" },
 ];
 
-const batting = battingSizes
-  .filter(b => b.width >= quiltWidth && b.length >= quiltLength)
-  .sort((a, b) => (a.width * a.length) - (b.width * b.length))[0];
+// Find all batting sizes that can cover the quilt (with rotation)
+const available = battingSizes
+  .filter(b =>
+    (b.width >= quiltWidth && b.length >= quiltLength) ||
+    (b.width >= quiltLength && b.length >= quiltWidth)
+  )
+  .sort((a, b) => (a.width * a.length) - (b.width * b.length));
+
+const batting = available.length > 0 ? available[0] : null;
 
 if (batting) {
+  // Construct URL to pre-filtered MSQC search
+  const query = encodeURIComponent(`quilters dream ${batting.sizeTag}`);
+  const url = `https://www.missouriquiltco.com/search?refinementList%5Bnamed_tags.Brand%5D%5B0%5D=Quilter%27s%20Dream&refinementList%5Bnamed_tags.Size%5D%5B0%5D=${batting.sizeTag}&q=${query}`;
+
   html += `<p><strong>Batting</strong><br>
-    <a href="${batting.url}" target="_blank">${batting.name} size Quilter’s Dream batting</a> (${batting.width}" x ${batting.length}").</p>`;
+    <a href="${url}" target="_blank">${batting.name} size Quilter's Dream batting</a></p>`;
 } else {
-  html += `<p><strong>Batting</strong><br>Your quilt is larger than standard batting sizes. You may need to piece batting or buy it by the roll.</p>`;
+  html += `<p><strong>Batting</strong><br>Your quilt is larger than standard batting sizes. You may need to piece batting or order a batting roll.</p>`;
 }
+
 
 
     html += `
