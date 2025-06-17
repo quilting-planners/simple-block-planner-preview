@@ -127,14 +127,14 @@ const bindingYards = ((bindingStrips * bindingWidth) / 36).toFixed(2);
     html += `<p><strong>Blocks</strong><br>${blocksAcross * blocksDown} total blocks (${blocksAcross} x ${blocksDown})<br>Cut to ${cutBlockSize} in x ${cutBlockSize} in</p>`;
 
 if (cutSashing) {
-  html += `<p><strong>Sashing</strong><br>Cut sashing strips to ${cutSashing}" wide.<br>You’ll need ${sashingStrips} strips from 42" wide fabric (${sashingYards} yards).</p>`;
+  html += `<p><strong>Sashing</strong><br>Cut sashing strips to ${cutSashing}" wide.<br>You’ll need ${sashingStrips} strips from standard width fabric (${sashingYards} yards).</p>`;
 }
 
 if (cutBorder) {
-  html += `<p><strong>Border</strong><br>Cut border strips to ${cutBorder}" wide.<br>You’ll need ${borderStrips} strips from 42" wide fabric (${borderYards} yards).</p>`;
+  html += `<p><strong>Border</strong><br>Cut border strips to ${cutBorder}" wide.<br>You’ll need ${borderStrips} strips from standard width fabric (${borderYards} yards).</p>`;
 }
 
-html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide.<br>You’ll need ${bindingStrips} strips from 42" wide fabric (${bindingYards} yards).</p>`;
+html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide. You’ll need ${bindingStrips} strips from standard width fabric (${bindingYards} yards).</p>`;
 
     
     // Backing Fabric
@@ -158,8 +158,8 @@ html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide.<br>You�
     const wideBacking = getBackingPlan(108);
 
     html += `<p><strong>Backing</strong><br>
-      You'll need ${standardBacking.yards} yards of 42" fabric. Cut in ${standardBacking.panels} panels.<br>
-      Or ${wideBacking.yards} yards of extra-wide fabric. Cut in ${wideBacking.panels} panels.</p>`;
+      You'll need ${standardBacking.yards} yards of standard width fabric (${standardBacking.panels} panels).<br>
+      Or ${wideBacking.yards} yards of extra-wide fabric (${wideBacking.panels} panels).</p>`;
 
 // Batting Recommendations (Quilter’s Dream, pre-filtered search links)
 const battingSizes = [
