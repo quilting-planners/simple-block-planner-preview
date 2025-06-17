@@ -24,15 +24,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("generate-button").addEventListener("click", generatePlan);
 
-  document.querySelectorAll(".step-button").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const input = document.getElementById(btn.dataset.target);
-    const change = parseFloat(btn.dataset.change);
-    const current = parseFloat(input.value) || 0;
-    const newValue = Math.max((current + change), parseFloat(input.min || 0));
-    input.value = (Math.round(newValue * 2) / 2).toFixed(1);
+   document.querySelectorAll(".step-button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const input = document.querySelector(`input#${btn.dataset.target}`);
+      if (!input) return;
+
+      const change = parseFloat(btn.dataset.change);
+      let current = parseFloat(input.value) || 0;
+      const min = parseFloat(input.min || 0);
+      let newValue = Math.max(min, current + change);
+      newValue = Math.round(newValue * 2) / 2; // round to nearest 0.5
+      input.value = newValue.toFixed(1);
+
+      // Update disabled state of minus button
+      const minusBtn = document.querySelector(`.step-button[data-target="${btn.dataset.target}"][data-change="-0.5"]`);
+      if (minusBtn) {
+        minusBtn.disabled = newValue <= min;
+      }
+    });
+
+    // Initial disable check
+    const input = document.querySelector(`input#${btn.dataset.target}`);
+    const min = parseFloat(input?.min || 0);
+    if (btn.dataset.change === "-0.5" && parseFloat(input?.value || 0) <= min) {
+      btn.disabled = true;
+    }
   });
-});
+
 
 });
 
