@@ -90,6 +90,34 @@ button:hover {
   background-color: #3A16B4;
 }
 
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  align-items: flex-start;
+}
+
+.button-group button {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 600px) {
+  .button-group {
+    flex-direction: column;
+  }
+
+  .button-group button {
+    width: 100%;
+  }
+
+  #copy-message {
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+
 .output {
   margin-top: 2.5rem;
   padding: 1rem;
