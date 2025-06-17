@@ -36,7 +36,6 @@ function generatePlan() {
     let throwSize = "";
     let bedName = "";
 
-    // Determine total quilt size
     if (use === "Throw for couch") {
       const tsInput = document.querySelector('input[name="throw-size"]:checked');
       throwSize = tsInput?.value;
@@ -78,7 +77,6 @@ function generatePlan() {
       totalLength = bedLength + overhang * 2;
     }
 
-    // Validate input sizes
     const maxInput = Math.min(totalWidth, totalLength);
     const blockSize = parseFloat(document.getElementById("block-size").value) || 0;
     const sashing = parseFloat(document.getElementById("sashing").value) || 0;
@@ -104,56 +102,48 @@ function generatePlan() {
       return;
     }
 
-    // Block layout
     const finishedBlock = blockSize + sashing;
     const blocksAcross = Math.round(totalWidth / finishedBlock);
     const blocksDown = Math.round(totalLength / finishedBlock);
     const totalBlocks = blocksAcross * blocksDown;
 
-    // Quilt top size (before borders)
     const topWidth = blocksAcross * finishedBlock - sashing;
     const topLength = blocksDown * finishedBlock - sashing;
-
-    // Final quilt size (including borders)
     const quiltWidth = topWidth + border * 2;
     const quiltLength = topLength + border * 2;
 
-    // Cutting sizes
     const cutBlockSize = (blockSize + 0.5).toFixed(1);
     const cutSashing = sashing > 0 ? (sashing + 0.5).toFixed(1) : null;
     const cutBorder = border > 0 ? (border + 0.5).toFixed(1) : null;
 
-    // Yardage + strips (42" wide fabric)
     const WOF = 42;
 
-    // Block fabric
+    // Blocks
     const blockArea = blockSize * blockSize * totalBlocks;
     const blockFabricYards = (blockArea / 1296).toFixed(2);
 
-   // Sashing
-let sashingStrips = null, sashingYards = null;
-if (sashing > 0) {
-  const sashingLenIn = (blocksAcross - 1) * quiltLength + (blocksDown - 1) * quiltWidth;
-  sashingStrips = Math.ceil(sashingLenIn / WOF);
-  sashingYards = ((sashingStrips * sashing) / 36).toFixed(2);
-}
+    // Sashing
+    let sashingStrips = null, sashingYards = null;
+    if (sashing > 0) {
+      const sashingLenIn = (blocksAcross - 1) * quiltLength + (blocksDown - 1) * quiltWidth;
+      sashingStrips = Math.ceil(sashingLenIn / WOF);
+      sashingYards = ((sashingStrips * sashing) / 36).toFixed(2);
+    }
 
-// Border
-let borderStrips = null, borderYards = null;
-if (border > 0) {
-  const borderLenIn = 2 * (topWidth + topLength);
-  borderStrips = Math.ceil(borderLenIn / WOF);
-  borderYards = ((borderStrips * border) / 36).toFixed(2);
-}
+    // Border
+    let borderStrips = null, borderYards = null;
+    if (border > 0) {
+      const borderLenIn = 2 * (topWidth + topLength);
+      borderStrips = Math.ceil(borderLenIn / WOF);
+      borderYards = ((borderStrips * border) / 36).toFixed(2);
+    }
 
-// Binding
-const bindingWidth = 2.5;
-const bindingLenIn = 2 * (quiltWidth + quiltLength) + 10;
-const bindingStrips = Math.ceil(bindingLenIn / WOF);
-const bindingYards = ((bindingStrips * bindingWidth) / 36).toFixed(2);
+    // Binding
+    const bindingWidth = 2.5;
+    const bindingLenIn = 2 * (quiltWidth + quiltLength) + 10;
+    const bindingStrips = Math.ceil(bindingLenIn / WOF);
+    const bindingYards = ((bindingStrips * bindingWidth) / 36).toFixed(2);
 
-
-    // Summary
     const summary = `You’re making a ${
       use === "Throw for couch"
         ? `${throwSize} throw blanket`
@@ -175,125 +165,66 @@ const bindingYards = ((bindingStrips * bindingWidth) / 36).toFixed(2);
     html += `<p><strong>Finished quilt</strong><br>${quiltWidth.toFixed(1)}" x ${quiltLength.toFixed(1)}"</p>`;
     html += `<p><strong>Blocks</strong><br>${totalBlocks} total blocks (${blocksAcross} across by ${blocksDown} down).<br>Cut blocks to ${cutBlockSize}" x ${cutBlockSize}".<br>You’ll need at least ${blockFabricYards} yards of 42” fabric.</p>`;
 
-  if (cutSashing) {
-  html += `<p><strong>Sashing</strong><br>Cut sashing strips to ${cutSashing}" wide.<br>You’ll need ${sashingStrips} strips from 42" wide fabric (${sashingYards} yards).</p>`;
-}
+    if (cutSashing) {
+      html += `<p><strong>Sashing</strong><br>Cut sashing strips to ${cutSashing}" wide.<br>You’ll need ${sashingStrips} strips from 42" wide fabric (${sashingYards} yards).</p>`;
+    }
 
-if (cutBorder) {
-  html += `<p><strong>Border</strong><br>Cut border strips to ${cutBorder}" wide.<br>You’ll need ${borderStrips} strips from 42" wide fabric (${borderYards} yards).</p>`;
-}
+    if (cutBorder) {
+      html += `<p><strong>Border</strong><br>Cut border strips to ${cutBorder}" wide.<br>You’ll need ${borderStrips} strips from 42" wide fabric (${borderYards} yards).</p>`;
+    }
 
-html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide.<br>You’ll need ${bindingStrips} strips from 42" wide fabric (${bindingYards} yards).</p>`;
+    html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide.<br>You’ll need ${bindingStrips} strips from 42" wide fabric (${bindingYards} yards).</p>`;
 
-    // Backing Fabric Calculations
-function getBackingPlan(fabricWidth) {
-  let panels, totalLength;
-  if (fabricWidth >= quiltWidth) {
-    panels = 1;
-    totalLength = quiltLength;
-  } else {
-    panels = Math.ceil(quiltWidth / fabricWidth);
-    totalLength = panels * quiltLength;
-  }
-  return {
-    width: fabricWidth,
-    panels,
-    yards: (totalLength / 36).toFixed(2),
-  };
-}
+    // Backing
+    function getBackingPlan(fabricWidth) {
+      let panels, totalLength;
+      if (fabricWidth >= quiltWidth) {
+        panels = 1;
+        totalLength = quiltLength;
+      } else {
+        panels = Math.ceil(quiltWidth / fabricWidth);
+        totalLength = panels * quiltLength;
+      }
+      return {
+        width: fabricWidth,
+        panels,
+        yards: (totalLength / 36).toFixed(2),
+      };
+    }
 
-const standardBacking = getBackingPlan(42);
-const wideBacking = getBackingPlan(108);
+    const standardBacking = getBackingPlan(42);
+    const wideBacking = getBackingPlan(108);
 
-html += `<p><strong>Backing</strong><br>
-You'll need ${standardBacking.yards} yards of 42" fabric. Cut in ${standardBacking.panels} panels.<br>
-Or ${wideBacking.yards} yards of extra wide fabric. Cut in ${wideBacking.panels} panels.</p>`;
+    html += `<p><strong>Backing</strong><br>
+    You'll need ${standardBacking.yards} yards of 42" fabric. Cut in ${standardBacking.panels} panels.<br>
+    Or ${wideBacking.yards} yards of extra wide fabric. Cut in ${wideBacking.panels} panels.</p>`;
 
-    // Batting Size Recommendation
-const battingSizes = [
-  { name: "Crib", width: 45, length: 60 },
-  { name: "Twin", width: 72, length: 90 },
-  { name: "Full", width: 81, length: 96 },
-  { name: "Queen", width: 90, length: 108 },
-  { name: "King", width: 120, length: 120 },
-  { name: "California King", width: 120, length: 122 },
-];
+    // Batting
+    const battingOptions = [
+      { name: "Throw (60×60)", w: 60, l: 60, url: "https://www.missouriquiltco.com/products/quilters-dream-select-natural-cotton-throw-batting" },
+      { name: "Twin (72×93)", w: 72, l: 93, url: "https://www.missouriquiltco.com/products/quilters-dream-select-natural-cotton-twin-batting" },
+      { name: "Full/Double (96×93)", w: 96, l: 93, url: "https://www.missouriquiltco.com/products/quilters-dream-select-natural-cotton-double-batting" },
+      { name: "Queen (108×93)", w: 108, l: 93, url: "https://www.missouriquiltco.com/products/quilters-dream-select-white-cotton-queen-batting" },
+      { name: "King (122×122)", w: 122, l: 122, url: "https://www.missouriquiltco.com/products/quilters-dream-select-natural-cotton-king-batting" }
+    ];
 
-// Find smallest size that fits
-const batting = battingSizes.find(b => b.width >= quiltWidth && b.length >= quiltLength);
+    const batting = battingOptions.find(b => b.w >= quiltWidth && b.l >= quiltLength);
 
-if (batting) {
-  html += `<p><strong>Batting</strong><br>
-  You'll need ${batting.name} size batting (${batting.width}" x ${batting.length}").</p>`;
-} else {
-  html += `<p><strong>Batting</strong><br>
-  Your quilt is larger than standard batting sizes. You’ll need to piece batting or buy extra-wide rolls.</p>`;
-}
+    if (batting) {
+      html += `<p><strong>Batting</strong><br>
+      We recommend <a href="${batting.url}" target="_blank" rel="noopener">${batting.name} Quilter’s Dream Select Cotton Batting</a> from Missouri Star.</p>`;
+    } else {
+      html += `<p><strong>Batting</strong><br>Your quilt is larger than standard batting sizes from Missouri Star. You may need to piece batting or shop for oversized options.</p>`;
+    }
 
-    
-    html += `
-      <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-        <button id="copy-plan-button" type="button" class="copy-button">
-          <i class="fa-solid fa-copy" style="margin-right: 0.5em;"></i>Copy plan
-        </button>
-        <button id="feedback-button" type="button" class="outline-button">
-          Give feedback <i class="fa-solid fa-up-right-from-square" style="margin-left: 0.5em;"></i>
-        </button>
-      </div>`;
-
+    // Output
     const out = document.getElementById("output");
     out.innerHTML = html;
-
-    document.getElementById("copy-plan-button").addEventListener("click", () => {
-      const clone = out.cloneNode(true);
-      clone.querySelector("#copy-plan-button")?.remove();
-      clone.querySelector("#feedback-button")?.remove();
-      clone.querySelectorAll("hr").forEach((hr) => {
-        hr.replaceWith(document.createTextNode("\n\n---\n\n"));
-      });
-
-      function getTextWithLineBreaks(node) {
-        let text = "";
-        node.childNodes.forEach((child) => {
-          if (child.nodeType === Node.TEXT_NODE) {
-            text += child.textContent;
-          } else if (child.nodeType === Node.ELEMENT_NODE) {
-            if (child.tagName === "BR") {
-              text += "\n";
-            } else if (child.tagName === "P") {
-              text += getTextWithLineBreaks(child).trim() + "\n\n";
-            } else if (child.tagName === "H2") {
-              text += "\n" + getTextWithLineBreaks(child).trim().toUpperCase() + "\n\n";
-            } else {
-              text += getTextWithLineBreaks(child);
-            }
-          }
-        });
-        return text;
-      }
-
-      const plainText = getTextWithLineBreaks(clone).trim();
-
-      navigator.clipboard.writeText(plainText)
-        .then(() => alert("Plan copied to clipboard!"))
-        .catch((err) => {
-          console.error("Copy failed:", err);
-          alert("Failed to copy plan. Try using a different browser.");
-        });
-    });
-
-    document.getElementById("feedback-button").addEventListener("click", () => {
-      window.open(
-        "https://docs.google.com/forms/d/e/1FAIpQLScRJtzvGLaC22oTmgbU4Us7MTRIaOFjNdx3cU4_3HRNKp1hUg/viewform?usp=preview",
-        "_blank"
-      );
-    });
-
     out.style.display = "block";
     out.scrollIntoView({ behavior: "smooth" });
-
   } catch (e) {
     console.error(e);
     document.getElementById("output").innerHTML = `<p>Error: ${e.message}</p>`;
   }
 }
+
