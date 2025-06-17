@@ -212,9 +212,9 @@ function generatePlan() {
 
     if (batting) {
       html += `<p><strong>Batting</strong><br>
-      We recommend <a href="${batting.url}" target="_blank" rel="noopener">${batting.name} Quilter’s Dream Select Cotton Batting</a> from Missouri Star.</p>`;
+      <a href="${batting.url}" target="_blank" rel="noopener">${batting.name} Quilter’s Dream Batting</a></p>`;
     } else {
-      html += `<p><strong>Batting</strong><br>Your quilt is larger than standard batting sizes from Missouri Star. You may need to piece batting or shop for oversized options.</p>`;
+      html += `<p><strong>Batting</strong><br>Your quilt is larger than standard Quilter's Dream batting. You may need to piece batting or shop for oversized options.</p>`;
     }
 
     // Output
