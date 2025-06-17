@@ -134,25 +134,37 @@ button:hover {
 }
 
 .field-row input[type="number"] {
-  width: 60px;
+  width: 80px; /* increased from 60px */
   font-size: 1.25rem;
+  text-align: center;
 }
 
+
 .step-button {
-  font-size: 1rem;
-  padding: 0.5rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  line-height: 1;
-  text-align: center;
-  background-color: #f0f0ff;
-  border: 1px solid #ccc;
+  padding: 0.5rem 0.75rem;
+  font-size: 1.25rem;
+  background-color: white;
+  border: 2px solid #000;
+  color: #000;
+  font-weight: bold;
   border-radius: 4px;
   cursor: pointer;
+  line-height: 1;
 }
 
 .step-button:hover {
-  background-color: #e0e0ff;
+  background-color: #f0f0f0;
+}
+
+.step-button:disabled {
+  border-color: #ccc;
+  color: #ccc;
+  background-color: #f9f9f9;
+  cursor: not-allowed;
+}
+
+.step-button:disabled:hover {
+  background-color: #f9f9f9;
 }
 
 
