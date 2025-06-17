@@ -23,6 +23,17 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("generate-button").addEventListener("click", generatePlan);
+
+  document.querySelectorAll(".step-button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const input = document.getElementById(btn.dataset.target);
+    const change = parseFloat(btn.dataset.change);
+    const current = parseFloat(input.value) || 0;
+    const newValue = Math.max((current + change), parseFloat(input.min || 0));
+    input.value = (Math.round(newValue * 2) / 2).toFixed(1);
+  });
+});
+
 });
 
 function generatePlan() {
