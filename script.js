@@ -24,32 +24,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("generate-button").addEventListener("click", generatePlan);
 
-   document.querySelectorAll(".step-button").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const input = document.querySelector(`input#${btn.dataset.target}`);
-      if (!input) return;
+document.querySelectorAll(".step-button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const input = document.getElementById(btn.dataset.target);
+    const change = parseFloat(btn.dataset.change);
+    const min = parseFloat(input.min || 0);
+    let current = parseFloat(input.value) || 0;
+    let newValue = Math.max(current + change, min);
 
-      const change = parseFloat(btn.dataset.change);
-      let current = parseFloat(input.value) || 0;
-      const min = parseFloat(input.min || 0);
-      let newValue = Math.max(min, current + change);
-      newValue = Math.round(newValue * 2) / 2; // round to nearest 0.5
-      input.value = newValue.toFixed(1);
+    // Round to nearest 0.5
+    newValue = Math.round(newValue * 2) / 2;
+    input.value = newValue.toFixed(1);
 
-      // Update disabled state of minus button
-      const minusBtn = document.querySelector(`.step-button[data-target="${btn.dataset.target}"][data-change="-0.5"]`);
-      if (minusBtn) {
-        minusBtn.disabled = newValue <= min;
-      }
-    });
-
-    // Initial disable check
-    const input = document.querySelector(`input#${btn.dataset.target}`);
-    const min = parseFloat(input?.min || 0);
-    if (btn.dataset.change === "-0.5" && parseFloat(input?.value || 0) <= min) {
-      btn.disabled = true;
-    }
+    updateStepButtons(input);
   });
+});
+
+function updateStepButtons(input) {
+  const min = parseFloat(input.min || 0);
+  const current = parseFloat(input.value) || 0;
+  const minusButton = document.querySelector(`.step-button[data-target="${input.id}"][data-change="-0.5"]`);
+  if (minusButton) {
+    minusButton.disabled = current <= min;
+  }
+}
+
+// Run on page load
+document.querySelectorAll('input[type="number"]').forEach((input) => updateStepButtons(input));
+
 
 
 });
