@@ -22,8 +22,29 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  document.querySelectorAll('input[name="unit"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      const selected = document.querySelector('input[name="unit"]:checked').value;
+      const unitLabels = document.querySelectorAll(".unit");
+
+      unitLabels.forEach((label) => {
+        label.textContent = selected === "cm" ? "centimeters" : "inches";
+      });
+
+      document.getElementById("output").innerHTML = "";
+    });
+  });
+
   document.getElementById("generate-button").addEventListener("click", generatePlan);
 });
+
+// Converts inches to display string in "cm" or "in"
+function toUserUnits(valueInInches) {
+  const unit = document.querySelector('input[name="unit"]:checked')?.value;
+  return unit === "cm"
+    ? (valueInInches * 2.54).toFixed(1) + " cm"
+    : valueInInches.toFixed(1) + " in";
+}
 
 function generatePlan() {
   try {
@@ -112,9 +133,9 @@ function generatePlan() {
     const quiltWidth = topWidth + border * 2;
     const quiltLength = topLength + border * 2;
 
-    const cutBlockSize = (blockSize + 0.5).toFixed(1);
-    const cutSashing = sashing > 0 ? (sashing + 0.5).toFixed(1) : null;
-    const cutBorder = border > 0 ? (border + 0.5).toFixed(1) : null;
+    const cutBlockSize = blockSize + 0.5;
+    const cutSashing = sashing > 0 ? sashing + 0.5 : null;
+    const cutBorder = border > 0 ? border + 0.5 : null;
 
     const WOF = 42;
 
@@ -147,7 +168,7 @@ function generatePlan() {
     const summary = `You’re making a ${
       use === "Throw for couch"
         ? `${throwSize} throw blanket`
-        : `cover for a ${bedName} (${bedWidth}" x ${bedLength}") bed`
+        : `cover for a ${bedName} (${bedWidth} x ${bedLength}) bed`
     } with ${blockSize}" square blocks${
       sashing > 0 ? `, ${sashing}" sashing` : ""
     }${border > 0 ? `, and a ${border}" border` : ""}.${
@@ -162,18 +183,18 @@ function generatePlan() {
         : `${bedName.charAt(0).toUpperCase() + bedName.slice(1)} bed cover`;
 
     let html = `<h2>${planTitle}</h2><span class="hint">${summary}</span>`;
-    html += `<p><strong>Finished quilt</strong><br>${quiltWidth.toFixed(1)}" x ${quiltLength.toFixed(1)}"</p>`;
-    html += `<p><strong>Blocks</strong><br>${totalBlocks} total blocks (${blocksAcross} across by ${blocksDown} down).<br>Cut blocks to ${cutBlockSize}" x ${cutBlockSize}".<br>You’ll need at least ${blockFabricYards} yards of 42” fabric.</p>`;
+    html += `<p><strong>Finished quilt</strong><br>${toUserUnits(quiltWidth)} x ${toUserUnits(quiltLength)}</p>`;
+    html += `<p><strong>Blocks</strong><br>${totalBlocks} total blocks (${blocksAcross} across by ${blocksDown} down).<br>Cut blocks to ${toUserUnits(cutBlockSize)} x ${toUserUnits(cutBlockSize)}.<br>You’ll need at least ${blockFabricYards} yards of 42” fabric.</p>`;
 
     if (cutSashing) {
-      html += `<p><strong>Sashing</strong><br>Cut sashing strips to ${cutSashing}" wide.<br>You’ll need ${sashingStrips} strips from 42" wide fabric (${sashingYards} yards).</p>`;
+      html += `<p><strong>Sashing</strong><br>Cut sashing strips to ${toUserUnits(cutSashing)} wide.<br>You’ll need ${sashingStrips} strips from 42" wide fabric (${sashingYards} yards).</p>`;
     }
 
     if (cutBorder) {
-      html += `<p><strong>Border</strong><br>Cut border strips to ${cutBorder}" wide.<br>You’ll need ${borderStrips} strips from 42" wide fabric (${borderYards} yards).</p>`;
+      html += `<p><strong>Border</strong><br>Cut border strips to ${toUserUnits(cutBorder)} wide.<br>You’ll need ${borderStrips} strips from 42" wide fabric (${borderYards} yards).</p>`;
     }
 
-    html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide.<br>You’ll need ${bindingStrips} strips from 42" wide fabric (${bindingYards} yards).</p>`;
+    html += `<p><strong>Binding</strong><br>Cut binding strips to ${toUserUnits(bindingWidth)} wide.<br>You’ll need ${bindingStrips} strips from 42" wide fabric (${bindingYards} yards).</p>`;
 
     // Backing
     function getBackingPlan(fabricWidth) {
@@ -212,19 +233,20 @@ function generatePlan() {
 
     if (batting) {
       html += `<p><strong>Batting</strong><br>
-      <a href="${batting.url}" target="_blank" rel="noopener">${batting.name} Quilter’s Dream Batting</a></p>`;
+      We recommend <a href="${batting.url}" target="_blank" rel="noopener">${batting.name} Quilter’s Dream Select Cotton Batting</a> from Missouri Star.</p>`;
     } else {
-      html += `<p><strong>Batting</strong><br>Your quilt is larger than standard Quilter's Dream batting. You may need to piece batting or shop for oversized options.</p>`;
+      html += `<p><strong>Batting</strong><br>Your quilt is larger than standard batting sizes from Missouri Star. You may need to piece batting or shop for oversized options.</p>`;
     }
 
-    // Output
     const out = document.getElementById("output");
     out.innerHTML = html;
     out.style.display = "block";
     out.scrollIntoView({ behavior: "smooth" });
+
   } catch (e) {
     console.error(e);
     document.getElementById("output").innerHTML = `<p>Error: ${e.message}</p>`;
   }
 }
+
 
