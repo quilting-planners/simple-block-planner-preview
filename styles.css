@@ -94,14 +94,22 @@ button:hover {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-top: 2rem;
-  align-items: flex-start;
+  margin-top: 1rem;
+  align-items: stretch;
 }
 
 .button-group button {
   flex: 1 1 auto;
+  height: 100%;
 }
 
+.copy-message {
+  color: green;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+/* Mobile: stack buttons full-width */
 @media (max-width: 600px) {
   .button-group {
     flex-direction: column;
@@ -109,11 +117,6 @@ button:hover {
 
   .button-group button {
     width: 100%;
-  }
-
-  #copy-message {
-    margin-top: -0.5rem;
-    margin-bottom: 0.5rem;
   }
 }
 
