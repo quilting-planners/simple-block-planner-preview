@@ -185,6 +185,52 @@ if (cutBorder) {
 
 html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide.<br>You’ll need ${bindingStrips} strips from 42" wide fabric (${bindingYards} yards).</p>`;
 
+    // Backing Fabric Calculations
+function getBackingPlan(fabricWidth) {
+  let panels, totalLength;
+  if (fabricWidth >= quiltWidth) {
+    panels = 1;
+    totalLength = quiltLength;
+  } else {
+    panels = Math.ceil(quiltWidth / fabricWidth);
+    totalLength = panels * quiltLength;
+  }
+  return {
+    width: fabricWidth,
+    panels,
+    yards: (totalLength / 36).toFixed(2),
+  };
+}
+
+const standardBacking = getBackingPlan(42);
+const wideBacking = getBackingPlan(108);
+
+html += `<p><strong>Backing</strong><br>
+You'll need ${standardBacking.yards} yards of 42" fabric. Cut in ${standardBacking.panels} panels.<br>
+Or ${wideBacking.yards} yards of extra wide fabric. Cut in ${wideBacking.panels} panels.</p>`;
+
+    // Batting Size Recommendation
+const battingSizes = [
+  { name: "Crib", width: 45, length: 60 },
+  { name: "Twin", width: 72, length: 90 },
+  { name: "Full", width: 81, length: 96 },
+  { name: "Queen", width: 90, length: 108 },
+  { name: "King", width: 120, length: 120 },
+  { name: "California King", width: 120, length: 122 },
+];
+
+// Find smallest size that fits
+const batting = battingSizes.find(b => b.width >= quiltWidth && b.length >= quiltLength);
+
+if (batting) {
+  html += `<p><strong>Batting</strong><br>
+  You'll need ${batting.name} size batting (${batting.width}" x ${batting.length}").</p>`;
+} else {
+  html += `<p><strong>Batting</strong><br>
+  Your quilt is larger than standard batting sizes. You’ll need to piece batting or buy extra-wide rolls.</p>`;
+}
+
+    
     html += `
       <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
         <button id="copy-plan-button" type="button" class="copy-button">
