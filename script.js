@@ -273,18 +273,39 @@ html += `
     out.style.display = "block";
     out.scrollIntoView({ behavior: "smooth" });
 
-    document.getElementById("copy-plan-button").addEventListener("click", () => {
+   document.getElementById("copy-plan-button").addEventListener("click", () => {
   const clone = out.cloneNode(true);
   clone.querySelector("#copy-plan-button")?.remove();
   clone.querySelector("#feedback-button")?.remove();
 
-  // Extract meaningful content and preserve line breaks
   const lines = [];
-  clone.querySelectorAll("h2, p, .hint").forEach((el) => {
+
+  clone.querySelectorAll("h2, .hint").forEach((el) => {
     lines.push(el.textContent.trim());
   });
 
-  const plainText = lines.join("\n\n");
+  clone.querySelectorAll("p").forEach((p) => {
+    // If the paragraph contains <br>, split its innerHTML manually
+    if (p.innerHTML.includes("<br")) {
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = p.innerHTML;
+      tempDiv.childNodes.forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent.trim();
+          if (text) lines.push(text);
+        } else if (node.tagName === "BR") {
+          lines.push(""); // line break
+        } else {
+          const text = node.textContent.trim();
+          if (text) lines.push(text);
+        }
+      });
+    } else {
+      lines.push(p.textContent.trim());
+    }
+  });
+
+  const plainText = lines.join("\n");
 
   navigator.clipboard.writeText(plainText).then(() => {
     const msg = document.getElementById("copy-message");
@@ -294,6 +315,7 @@ html += `
     }, 6000);
   });
 });
+
 
 
     document.getElementById("feedback-button").addEventListener("click", () => {
