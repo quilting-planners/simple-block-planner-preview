@@ -221,18 +221,19 @@ Batting: ${battingCost}</p>`;
 
 
 
-  html += `
+html += `
+  <div id="copy-message" class="copy-message" style="display: none;">
+    <i class="fa-solid fa-check" style="margin-right: 0.3em;"></i>Copied to clipboard
+  </div>
   <div class="button-group">
     <button id="copy-plan-button" type="button" class="copy-button">
       <i class="fa-solid fa-copy" style="margin-right: 0.5em;"></i>Copy plan
     </button>
-    <div id="copy-message" style="display: none; color: green; font-weight: 600;">
-      <i class="fa-solid fa-check" style="margin-right: 0.3em;"></i>Copied to clipboard
-    </div>
     <button id="feedback-button" type="button" class="outline-button">
       Give feedback <i class="fa-solid fa-up-right-from-square" style="margin-left: 0.5em;"></i>
     </button>
   </div>`;
+
 
 
 
