@@ -221,8 +221,8 @@ Batting: ${battingCost}</p>`;
 
 
 
-   html += `
-  <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
+  html += `
+  <div class="button-group">
     <button id="copy-plan-button" type="button" class="copy-button">
       <i class="fa-solid fa-copy" style="margin-right: 0.5em;"></i>Copy plan
     </button>
@@ -233,6 +233,7 @@ Batting: ${battingCost}</p>`;
       Give feedback <i class="fa-solid fa-up-right-from-square" style="margin-left: 0.5em;"></i>
     </button>
   </div>`;
+
 
 
     const out = document.getElementById("output");
