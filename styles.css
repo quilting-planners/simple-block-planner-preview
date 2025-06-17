@@ -83,6 +83,8 @@ button.primary-large {
 
 .outline-button:hover {
   background-color: #f4f0ff;
+  border-color: #3A16B4;
+  color: #3A16B4;
 }
 
 
@@ -99,7 +101,9 @@ button:hover {
 }
 
 .button-group button {
-  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
 }
 
