@@ -127,14 +127,14 @@ const bindingYards = ((bindingStrips * bindingWidth) / 36).toFixed(2);
     html += `<p><strong>Blocks</strong><br>${blocksAcross * blocksDown} total blocks (${blocksAcross} across by ${blocksDown} down)<br>Cut to ${cutBlockSize}" x ${cutBlockSize}"</p>`;
 
 if (cutSashing) {
-  html += `<p><strong>Sashing</strong><br>Cut sashing strips to ${cutSashing}" wide.<br>You’ll need ${sashingStrips} strips of 42" fabric (${sashingYards} yards).</p>`;
+  html += `<p><strong>Sashing</strong><br>${sashingStrips} strips of ${cutSashing}" x 42" fabric (${sashingYards} yd)</p>`;
 }
 
 if (cutBorder) {
-  html += `<p><strong>Border</strong><br>Cut border strips to ${cutBorder}" wide.<br>You’ll need ${borderStrips} strips of 42" fabric (${borderYards} yd).</p>`;
+  html += `<p><strong>Border</strong><br>${borderStrips} strips of ${cutBorder}" x 42" fabric (${borderYards} yd)</p>`;
 }
 
-html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide. You’ll need ${bindingStrips} strips of 42" fabric (${bindingYards} yd).</p>`;
+html += `<p><strong>Binding</strong><br>${bindingStrips} strips of 2.5" x 42" fabric (${bindingYards} yd)</p>`;
 
     
     // Backing Fabric
@@ -158,7 +158,7 @@ html += `<p><strong>Binding</strong><br>Cut binding strips to 2.5" wide. You’l
     const wideBacking = getBackingPlan(108);
 
     html += `<p><strong>Backing</strong><br>
-      You'll need ${standardBacking.yards} yd of 42" fabric (${standardBacking.panels} panels) or ${wideBacking.yards} yards of extra-wide fabric (${wideBacking.panels} panels).</p>`;
+      ${standardBacking.yards} yd of 42" fabric (${standardBacking.panels} panels) or ${wideBacking.yards} yd of 108" fabric (${wideBacking.panels} panels)</p>`;
 
 // Batting Recommendations (Quilter’s Dream, pre-filtered search links)
 const battingSizes = [
