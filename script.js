@@ -273,35 +273,42 @@ html += `
     out.style.display = "block";
     out.scrollIntoView({ behavior: "smooth" });
 
-   document.getElementById("copy-plan-button").addEventListener("click", () => {
+  document.getElementById("copy-plan-button").addEventListener("click", () => {
   const clone = out.cloneNode(true);
   clone.querySelector("#copy-plan-button")?.remove();
   clone.querySelector("#feedback-button")?.remove();
 
   const lines = [];
 
-  clone.querySelectorAll("h2, .hint").forEach((el) => {
-    lines.push(el.textContent.trim());
-  });
+  // Add plan title
+  const title = clone.querySelector("h2");
+  if (title) lines.push(title.textContent.trim());
 
+  // Add summary (the hint)
+  const hint = clone.querySelector(".hint");
+  if (hint) {
+    lines.push(hint.textContent.trim());
+    lines.push(""); // blank line
+  }
+
+  // Process paragraphs
   clone.querySelectorAll("p").forEach((p) => {
-    // If the paragraph contains <br>, split its innerHTML manually
-    if (p.innerHTML.includes("<br")) {
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = p.innerHTML;
-      tempDiv.childNodes.forEach((node) => {
-        if (node.nodeType === Node.TEXT_NODE) {
-          const text = node.textContent.trim();
-          if (text) lines.push(text);
-        } else if (node.tagName === "BR") {
-          lines.push(""); // line break
-        } else {
-          const text = node.textContent.trim();
-          if (text) lines.push(text);
-        }
-      });
+    const strong = p.querySelector("strong");
+    const strongText = strong ? strong.textContent.trim() : "";
+
+    const rawParts = p.innerHTML.split(/<br\s*\/?>/i).map(part => {
+      const temp = document.createElement("div");
+      temp.innerHTML = part;
+      return temp.textContent.trim();
+    }).filter(Boolean);
+
+    if (strongText && rawParts.length > 0) {
+      lines.push(strongText);              // section heading
+      lines.push(...rawParts.slice(1));    // section content
+      lines.push("");                      // blank line
     } else {
-      lines.push(p.textContent.trim());
+      lines.push(...rawParts);
+      lines.push("");
     }
   });
 
@@ -315,6 +322,7 @@ html += `
     }, 6000);
   });
 });
+
 
 
 
