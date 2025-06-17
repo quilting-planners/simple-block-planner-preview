@@ -198,24 +198,27 @@ fabricYards += parseFloat(borderYards || 0);
 fabricYards += parseFloat(bindingYards || 0);
 fabricYards += parseFloat(standardBacking.yards || 0);
 
-const fabricCostLow = (fabricYards * 10).toFixed(2);
-const fabricCostHigh = (fabricYards * 12).toFixed(2);
+const avgFabricCostPerYard = 11;
+const estimatedFabricCost = Math.round(fabricYards * avgFabricCostPerYard);
+
 
 // Estimate batting cost (approx range per size)
 const battingPriceEstimate = {
-  Crib: "$10–$12",
-  Throw: "$13–$16",
-  Twin: "$17–$21",
-  Double: "$20–$25",
-  Queen: "$25–$30",
-  King: "$30–$36",
+  Crib: "$11",
+  Throw: "$15",
+  Twin: "$19",
+  Double: "$23",
+  Queen: "$28",
+  King: "$33",
 };
+
 
 const battingCost = batting ? (battingPriceEstimate[batting.name] || "$25–$40") : "$30+";
 
 html += `<p><strong>Estimated cost</strong><br>
-Fabric: $${fabricCostLow}–$${fabricCostHigh}<br>
+Fabric: $${estimatedFabricCost}<br>
 Batting: ${battingCost}</p>`;
+
 
 
     html += `
