@@ -222,6 +222,43 @@ button:hover {
   margin-bottom: 48px;
 }
 
+.quilt-visual-wrapper {
+  margin: 32px auto;
+  border: 1px solid #999;
+  padding: 0;
+  background: #FFF;
+  display: block;
+  box-sizing: border-box;
+  width: 75%;
+  overflow: hidden;
+}
+
+.quilt-visual {
+  display: grid;
+  width: 100%;
+  aspect-ratio: auto;
+  background: transparent;
+}
+
+.quilt-cell {
+  background-color: #666;
+  border: 1px solid #FFF;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sashing {
+  background-color: transparent;
+  border: none;
+}
+
+.border-strip {
+  background-color: transparent;
+  border: none;
+}
+
+
 
 #output {
   background-color: #F5F2FF; 
